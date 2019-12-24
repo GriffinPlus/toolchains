@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t griffinplus/toolchains/builder .
+docker build -t griffinplus/toolchain-builder .
