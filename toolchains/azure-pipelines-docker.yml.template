@@ -17,6 +17,7 @@ variables:
   value: $(dockerhub-password)
 
 steps:
+
 - task: DownloadGitHubRelease@0
   displayName: Download toolchains from Github Releases
   inputs:
@@ -26,41 +27,85 @@ steps:
     version: gcc-${{ parameters.gccVersion }}
     itemPattern: '*.tar.gz'
     downloadPath: $(Build.SourcesDirectory)/releases
+
 - task: Docker@2
   displayName: Login
   inputs:
     command: login
     containerregistry: Docker Hub
+
 - script: |
     set -e
     cd "$(Build.SourcesDirectory)/releases"
+
+    # craft image description
+    # --------------------------------------------------------------------
+    cp "$(Build.SourcesDirectory)/${{ parameters.readmePath }}" readme.md
+    cat >> readme.md <<END-OF-TEXT
+
+    -----
+
+    ## Ingredients
+
+    The following sections contain the output of \`ct-ng show-config\` and indicate which software got into the toolchain.
+
+    END-OF-TEXT
+
+    # iterate over the toolchain packages and
+    # - build and push a docker image containing the toolchain
+    # - add toolchain ingredients to the readme
+    # --------------------------------------------------------------------
     while IFS= read -r file; do
       toolchain=$(echo ${file} | sed 's/.*\/\(.*\)\.tar.gz$/\1/')
-      image_tag="${toolchain}"
+
+      # extract toolchain package
+      # --------------------------------------------------------------------
       mkdir -p "build-context/files/usr/local/x-tools"
       tar -xzf "${file}" -C build-context/files/usr/local/x-tools
+
+      cat >> readme.md <<END-OF-TEXT
+    ### \`${{ parameters.dockerImage }}:${toolchain}\`
+
+    \`\`\`
+    $(cat "build-context/files/usr/local/x-tools/${toolchain}/toolchain.info")
+    \`\`\`
+    END-OF-TEXT
+
+      # create Dockerfile for the toolchain image
+      # --------------------------------------------------------------------
       cat > "build-context/Dockerfile" <<END-OF-TEXT
     FROM ${{ parameters.dockerBaseImage }}
     ENV PATH "/usr/local/x-tools/${toolchain}/bin:\${PATH}"
     COPY files /
     END-OF-TEXT
+
+      # build docker image
+      # --------------------------------------------------------------------
       pushd build-context
       docker build --tag "${{ parameters.dockerImage }}:${toolchain}" .
       docker push "${{ parameters.dockerImage }}:${toolchain}"
       popd
+
+      # clear build context for the next run
+      # --------------------------------------------------------------------
       chmod -Rf u+w build-context
       rm -rf build-context
+
     done <<< "$(find . -name '*.tar.gz' | sort)"
+
     # update image description
-    cd "$(Build.SourcesDirectory)"
+    # --------------------------------------------------------------------
+    cd "$(Build.SourcesDirectory)/releases"
     docker run \
       -v $PWD:/workspace \
       -e DOCKERHUB_USERNAME='$(registry_user)' \
       -e DOCKERHUB_PASSWORD='$(registry_password)' \
       -e DOCKERHUB_REPOSITORY='${{ parameters.dockerImage }}' \
-      -e README_FILEPATH='/workspace/${{ parameters.readmePath }}' \
+      -e README_FILEPATH='/workspace/readme.md' \
       griffinplus/dockerhub-description:latest
+
   displayName: Build and Push
+
 - task: Docker@2
   displayName: Logout
   inputs:
