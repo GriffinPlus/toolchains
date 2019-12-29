@@ -8,7 +8,7 @@ trigger:
     - toolchains/*
     exclude:
     - toolchains/azure-pipelines-docker.yml.template
-    - toolchains/toolchains/configs/*/azure-pipelines-docker.yml
+    - toolchains/configs/*/azure-pipelines-docker.yml
 
 # do not trigger on pull requests to avoid that pull requests trigger releases
 pr: none
