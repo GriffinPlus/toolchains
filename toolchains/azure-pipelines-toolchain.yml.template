@@ -80,8 +80,6 @@ stages:
         patterns: package-*/**
         path: $(Build.ArtifactStagingDirectory)
     - script: |
-        ls -al $(Build.ArtifactStagingDirectory)
-    - script: |
         cd "$(Build.ArtifactStagingDirectory)"
         while IFS= read -r file; do
           toolchain=$(echo ${file} | sed 's/.*\/\(.*\)\.toolchain-info$/\1/')
