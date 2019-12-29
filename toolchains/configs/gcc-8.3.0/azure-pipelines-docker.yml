@@ -7,6 +7,7 @@ trigger:
     include:
     - toolchains/azure-pipelines-docker.yml.template
     - toolchains/toolchains/configs/gcc-8.3.0/azure-pipelines-docker.yml
+    - toolchains/toolchains/configs/gcc-8.3.0/readme-docker.md
 
 # do not trigger on pull requests to avoid that pull requests trigger releases
 pr: none
