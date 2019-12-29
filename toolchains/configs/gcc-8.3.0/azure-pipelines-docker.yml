@@ -16,3 +16,4 @@ extends:
   parameters:
     gccVersion: 8.3.0
     dockerImage: griffinplus/toolchain-gcc-8.3.0
+    readmePath: /toolchains/configs/gcc-8.3.0/readme-docker.md
