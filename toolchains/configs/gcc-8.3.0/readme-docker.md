@@ -9,7 +9,7 @@
 
 These docker images provide a cross-compilation environment based on cross-toolchains that
 have been built by [Griffin+](https://github.com/griffinplus). The image tags select the
-target platform the encorporated toolchain. The following toolchains are available:
+target platform of the encorporated toolchain. The following toolchains are available:
 
 | Toolchain                 | Image (Docker Hub)
 | :------------------------ | :--------------------------------------------
