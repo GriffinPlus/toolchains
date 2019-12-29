@@ -1,0 +1,50 @@
+parameters:
+- name: gccVersion
+  type: string 
+- name: dockerImage
+  type: string
+- name: dockerBaseImage
+  type: string
+  default: griffinplus/toolchain-base:latest
+
+steps:
+- task: DownloadGitHubRelease@0
+  displayName: Download toolchains from Github Releases
+  inputs:
+    connection: Github
+    userRepository: griffinplus/toolchains
+    defaultVersionType: specificTag
+    version: gcc-${{ parameters.gccVersion }}
+    itemPattern: '*.tar.gz'
+    downloadPath: $(Build.SourcesDirectory)/releases
+- task: Docker@2
+  displayName: Login
+  inputs:
+    command: login
+    containerregistry: Docker Hub
+- script: |
+    set -e
+    cd "$(Build.SourcesDirectory)/releases"
+    while IFS= read -r file; do
+      toolchain=$(echo ${file} | sed 's/.*\/\(.*\)\.tar.gz$/\1/')
+      image_tag="${toolchain}"
+      mkdir -p "build-context/files/usr/local/x-tools"
+      tar -xzf "${file}" -C build-context/files/usr/local/x-tools
+      cat > "build-context/Dockerfile" <<END-OF-TEXT
+    FROM ${{ parameters.dockerBaseImage }}
+    ENV PATH "/usr/local/x-tools/${toolchain}/bin:\${PATH}"
+    COPY files /
+    END-OF-TEXT
+      pushd build-context
+      docker build --tag "${{ parameters.dockerImage }}:${toolchain}" .
+      docker push "${{ parameters.dockerImage }}:${toolchain}"
+      popd
+      chmod -Rf u+w build-context
+      rm -rf build-context
+    done <<< "$(find . -name '*.tar.gz' | sort)"
+  displayName: Build and Push
+- task: Docker@2
+  displayName: Logout
+  inputs:
+    command: logout
+    containerRegistry: Docker Hub

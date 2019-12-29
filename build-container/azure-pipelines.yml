@@ -1,11 +1,11 @@
-# The pipeline builds the docker image, tags it as 'latest' and pushes it to the Docker Hub
+# The pipeline builds the docker images providing crosstool-NG.
+# The different crosstool-NG versions pushed using different tags, e.g. the image
+# griffinplus/toolchain-builder:ct-ng-1.24.0 contains crosstool-NG v1.24.0.
 
 variables:
-  - group: AzureKeyVault
+  - group: AzureKeyVault - Docker Hub
   - name: repository
     value: griffinplus/toolchain-builder
-  - name: image_tag
-    value: latest
   - name: registry_user
     value: $(dockerhub-user)
   - name: registry_password
@@ -18,7 +18,7 @@ trigger:
   paths:
     include:
     - build-container/*
-    
+
 # do not trigger on pull requests to avoid that tag 'latest' is pushed for pull requests
 pr: none
 
@@ -33,31 +33,51 @@ schedules:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: Docker@2
-  displayName: Login
-  inputs:
-    command: login
-    containerregistry: Docker Hub
-- task: Docker@2 
-  displayName: Build and Push
-  inputs:
-    command: buildAndPush
-    Dockerfile: build-container/Dockerfile
-    repository: $(repository)
-    tags: $(image_tag)
-- script: |
-      cd base;
-      docker run \
-      -v $PWD:/workspace \
-      -e DOCKERHUB_USERNAME='$(registry_user)' \
-      -e DOCKERHUB_PASSWORD='$(registry_password)' \
-      -e DOCKERHUB_REPOSITORY='$(repository)' \
-      -e README_FILEPATH='/workspace/build-container/README.md' \
-      griffinplus/dockerhub-description:latest
-  displayName: Update Image Description
-- task: Docker@2
-  displayName: Logout
-  inputs:
-    command: logout
-    containerRegistry: Docker Hub
+stages:
+- stage: Build
+  jobs:
+  - job:
+    displayName: Build
+    strategy:
+      matrix:
+        ct-ng-1.24.0:
+          CTNG_VERSION: 1.24.0
+          IMAGE_TAGS: |
+            latest
+            ct-ng-1.24.0
+    steps:
+    - task: Docker@2
+      displayName: Login
+      inputs:
+        command: login
+        containerregistry: Docker Hub
+    - task: Docker@2 
+      displayName: Build
+      inputs:
+        command: build
+        Dockerfile: build-container/Dockerfile
+        repository: $(repository)
+        tags: $(IMAGE_TAGS)
+        arguments: --build-arg CTNG_VERSION=$(CTNG_VERSION)
+    - task: Docker@2 
+      displayName: Push
+      inputs:
+        command: push
+        repository: $(repository)
+        tags: $(IMAGE_TAGS)
+    - script: |
+        set -e
+        cd build-container
+        docker run \
+          -v $PWD:/workspace \
+          -e DOCKERHUB_USERNAME='$(registry_user)' \
+          -e DOCKERHUB_PASSWORD='$(registry_password)' \
+          -e DOCKERHUB_REPOSITORY='$(repository)' \
+          -e README_FILEPATH='/workspace/README.md' \
+          griffinplus/dockerhub-description:latest
+      displayName: Update Image Description
+    - task: Docker@2
+      displayName: Logout
+      inputs:
+        command: logout
+        containerRegistry: Docker Hub

@@ -1,0 +1,18 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - toolchains/azure-pipelines-docker.yml.template
+    - toolchains/toolchains/configs/gcc-8.3.0/azure-pipelines-docker.yml
+
+# do not trigger on pull requests to avoid that pull requests trigger releases
+pr: none
+
+extends:
+  template: ../../azure-pipelines-docker.yml.template
+  parameters:
+    gccVersion: 8.3.0
+    dockerImage: griffinplus/toolchain-gcc-8.3.0

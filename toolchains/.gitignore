@@ -1,0 +1,6 @@
+.config
+.config.*
+.work/
+build.log
+download-cache/
+x-tools/

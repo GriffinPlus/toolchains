@@ -1,0 +1,117 @@
+parameters:
+- name: gccVersion
+  type: string 
+- name: ctngVersion
+  type: string 
+- name: strategyMatrix 
+  type: object
+
+stages:
+- stage: Preparation
+  jobs:
+  - job: 
+    displayName: Download source code
+    container: griffinplus/toolchain-builder:ct-ng-${{ parameters.ctngVersion }}
+    steps:
+    - script: ./ci-download-sources.sh gcc-${{ parameters.gccVersion }}
+      displayName: Download source code
+      workingDirectory: $(Build.SourcesDirectory)/toolchains
+    - task: PublishPipelineArtifact@1
+      displayName: Upload source code as pipeline artifact
+      inputs:
+        targetPath: $(Build.SourcesDirectory)/toolchains/download-cache
+        artifactName: SourceTarballs
+- stage: Build
+  variables:
+  - group: AzureKeyVault - S3 Bucket
+  jobs:
+  - job: 
+    displayName: Build
+    container: griffinplus/toolchain-builder:ct-ng-${{ parameters.ctngVersion }}
+    timeoutInMinutes: 0
+    strategy:
+      matrix: ${{ parameters.strategyMatrix }}
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download pipeline artifact with source code
+      inputs:
+        source: current
+        artifact: SourceTarballs
+        path: $(Build.SourcesDirectory)/toolchains/download-cache
+    - script: |
+        set -e
+        ./ci-build-toolchain.sh gcc-${{ parameters.gccVersion }} ${TARGET}
+      displayName: Build toolchain
+      workingDirectory: $(Build.SourcesDirectory)/toolchains
+    - script: |
+        set -e
+        export AWS_ENDPOINT="$(s3-endpoint)"
+        export AWS_BUCKET_NAME="$(s3-bucket-name)"
+        export AWS_ACCESS_KEY_ID="$(s3-access-key)"
+        export AWS_SECRET_ACCESS_KEY="$(s3-secret-key)"
+        ./ci-upload-toolchain-to-s3.sh gcc-${{ parameters.gccVersion }} ${TARGET}
+      displayName: Upload toolchain to S3
+      workingDirectory: $(Build.SourcesDirectory)/toolchains
+    - script: |
+        set -e
+        cd x-tools
+        tar -cvzf "$(Build.ArtifactStagingDirectory)/${TARGET}.tar.gz" "${TARGET}/"
+        cp "${TARGET}/package.info" "$(Build.ArtifactStagingDirectory)/${TARGET}.info"
+        cp "${TARGET}/toolchain.info" "$(Build.ArtifactStagingDirectory)/${TARGET}.toolchain-info"
+      displayName: Create toolchain package
+      workingDirectory: $(Build.SourcesDirectory)/toolchains
+    - task: PublishPipelineArtifact@1
+      displayName: Upload toolchain package as pipeline artifact
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)
+        artifactName: package-$(TARGET)
+- stage: Deployment
+  jobs:
+  - job: 
+    displayName: Deploy
+    container: griffinplus/toolchain-builder:ct-ng-${{ parameters.ctngVersion }}
+    variables:
+      github-release-tag: gcc-${{ parameters.gccVersion }}
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download built toolchains
+      inputs:
+        source: current
+        patterns: package-*/**
+        path: $(Build.ArtifactStagingDirectory)
+    - script: |
+        ls -al $(Build.ArtifactStagingDirectory)
+    - script: |
+        cd "$(Build.ArtifactStagingDirectory)"
+        while IFS= read -r file; do
+          toolchain=$(echo ${file} | sed 's/.*\/\(.*\)\.toolchain-info$/\1/')
+          echo "#### [${toolchain}](https://github.com/GriffinPlus/toolchains/releases/download/$(github-release-tag)/${toolchain}.tar.gz)"
+          echo
+          echo '```'
+          cat "${file}"
+          echo '```'
+          echo
+        done <<< "$(find . -name '*.toolchain-info' | sort)" > ReleaseNotes.md
+    - task: GithubRelease@0
+      displayName: Delete GitHub Release
+      continueOnError: true
+      inputs:
+        gitHubConnection: Github
+        repositoryName: $(Build.Repository.Name)
+        action: delete
+        tag: $(github-release-tag)
+    - task: GithubRelease@0 
+      displayName: Create GitHub Release
+      inputs:
+        gitHubConnection: Github
+        repositoryName: $(Build.Repository.Name)
+        action: create
+        target: $(Build.SourceVersion)
+        tag: $(github-release-tag)
+        tagSource: manual
+        title: Toolchains (gcc-${{ parameters.gccVersion }})
+        releaseNotesFile: $(Build.ArtifactStagingDirectory)/ReleaseNotes.md
+        addChangeLog: false
+        assets: |
+          $(Build.ArtifactStagingDirectory)/*/*.tar.gz
+          $(Build.ArtifactStagingDirectory)/*/package-*.info

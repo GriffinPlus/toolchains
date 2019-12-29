@@ -1,9 +1,13 @@
 # Prebuilt Toolchains for Cross-Compiling for Common Targets
 
+[![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/21/master?label=Toolchains%20%28gcc-8.3.0%29)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=21)
+[![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/20/master?label=Toolchains%20Builder%20Images)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=20)
+[![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/22/master?label=Toolchains%20Base%20Image)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=22)
+
 ## Overview
 
 This project uses [crosstool-NG](https://crosstool-ng.github.io) to build a set
-of toolchains needed for building other *GriffinPlus* projects. Although this
+of toolchains needed for building other *Griffin+* projects. Although this
 project provides a couple of toolchains, it makes no claim to completeness. If
 some other toolchain is needed, the scripts provided with the repository may
 assist with building a custom toolchain tailored to a specific need.
@@ -32,105 +36,25 @@ The following tools are shipped with the docker images:
 - `patch`
 - `wget`
 
-## Supported Target Platforms
+## Releases
 
-The toolchains contain the following ingredients as presented by `ct-ng show-config`.
+The built toolchains can be downloaded from the [Releases](https://github.com/GriffinPlus/toolchains/releases)
+section. Furthermore the toolchains are also available as docker images that can
+directly be used in a CI pipeline. The docker images are available from the
+[Docker Hub](https://hub.docker.com/repository/docker/griffinplus/toolchain).
+The different toolchains can be selected via the image tag.
 
-### i686-unknown-linux-musl
+## License
 
-This toolchain compiles for Linux on a 32 bit x86 CPU (Pentium-II or higher).
+The project itself is subject to the [MIT license](https://github.com/GriffinPlus/toolchains/blob/master/LICENSE).
 
-```
-[l..X]   i686-unknown-linux-musl
-    Languages       : C,C++,Fortran
-    OS              : linux-4.20.8
-    Binutils        : binutils-2.32
-    Compiler        : gcc-8.3.0
-    C library       : musl-1.1.21
-    Debug tools     : duma-2_5_15 gdb-8.2.1
-    Companion libs  : cloog-0.18.4 expat-2.2.6 gettext-0.19.8.1 gmp-6.1.2 isl-0.20 libelf-0.8.13 libiconv-1.15 mpc-1.1.0 mpfr-4.0.2 ncurses-6.1 zlib-1.2.11
-    Companion tools :
-```
-
-#### Downloads
-
-| Status         | Toolchain      | Docker Image
-| :------------- | :------------- | :-------------
-| Development    | [Download](https://s3.eu-central-1.wasabisys.com/griffinplus-toolchains-releases/i686-unknown-linux-musl-branch-master.tar.gz) | `registry.gitlab.com/griffinplus/toolchains/i686-unknown-linux-musl:master`
-
---------------------------------------------------------------------------------
-
-### i686-w64-mingw32
-
-This toolchain compiles for Windows on a 32 bit x86 CPU (Pentium-II or higher).
-
-```
-[l..X]   i686-w64-mingw32
-    Languages       : C,C++
-    OS              : windows
-    Binutils        : binutils-2.32
-    Compiler        : gcc-8.3.0
-    C library       : mingw-w64-v6.0.0
-    Debug tools     : gdb-8.2.1
-    Companion libs  : cloog-0.18.4 expat-2.2.6 gettext-0.19.8.1 gmp-6.1.2 isl-0.20 libelf-0.8.13 libiconv-1.15 mpc-1.1.0 mpfr-4.0.2 ncurses-6.1 zlib-1.2.11
-    Companion tools :
-```
-
-#### Downloads
-
-| Status         | Toolchain      | Docker Image
-| :------------- | :------------- | :-------------
-| Development    | [Download](https://s3.eu-central-1.wasabisys.com/griffinplus-toolchains-releases/i686-w64-mingw32-branch-master.tar.gz) | `registry.gitlab.com/griffinplus/toolchains/i686-w64-mingw32:master`
-
---------------------------------------------------------------------------------
-
-### x86_64-unknown-linux-musl
-
-This toolchain compiles for Linux on a 64 bit x86 CPU. *x86_64* is also known as *x64* and *AMD64*.
-
-```
-[l..X]   x86_64-unknown-linux-musl
-    Languages       : C,C++,Fortran
-    OS              : linux-4.20.8
-    Binutils        : binutils-2.32
-    Compiler        : gcc-8.3.0
-    C library       : musl-1.1.21
-    Debug tools     : duma-2_5_15 gdb-8.2.1
-    Companion libs  : cloog-0.18.4 expat-2.2.6 gettext-0.19.8.1 gmp-6.1.2 isl-0.20 libelf-0.8.13 libiconv-1.15 mpc-1.1.0 mpfr-4.0.2 ncurses-6.1 zlib-1.2.11
-    Companion tools :
-```
-
-#### Downloads
-
-| Status         | Toolchain      | Docker Image
-| :------------- | :------------- | :-------------
-| Development    | [Download](https://s3.eu-central-1.wasabisys.com/griffinplus-toolchains-releases/x86_64-unknown-linux-musl-branch-master.tar.gz) | `registry.gitlab.com/griffinplus/toolchains/x86_64-unknown-linux-musl:master`
-
---------------------------------------------------------------------------------
-
-### x86_64-w64-mingw32
-
-This toolchain compiles for Windows on a 64 bit x86 CPU. *x86_64* is also known as *x64* and *AMD64*.
-
-```
-[l..X]   x86_64-w64-mingw32
-    Languages       : C,C++
-    OS              : windows
-    Binutils        : binutils-2.32
-    Compiler        : gcc-8.3.0
-    C library       : mingw-w64-v6.0.0
-    Debug tools     : gdb-8.2.1
-    Companion libs  : cloog-0.18.4 expat-2.2.6 gettext-0.19.8.1 gmp-6.1.2 isl-0.20 libelf-0.8.13 libiconv-1.15 mpc-1.1.0 mpfr-4.0.2 ncurses-6.1 zlib-1.2.11
-    Companion tools :
-```
-
-#### Downloads
-
-| Status         | Toolchain      | Docker Image
-| :------------- | :------------- | :-------------
-| Development    | [Download](https://s3.eu-central-1.wasabisys.com/griffinplus-toolchains-releases/x86_64-w64-mingw32-branch-master.tar.gz) | `registry.gitlab.com/griffinplus/toolchains/x86_64-w64-mingw32:master`
-
---------------------------------------------------------------------------------
+The provided toolchain packages are built from source using [crosstool-NG](https://crosstool-ng.github.io).
+The software packages that go into the toolchains are subject to their own licenses.
+The license texts are bundled with the toolchain packages. The docker images
+encorporating the toolchains contain even more third-party software that come
+under a variety of open-source licenses. All licenses allow the use in commercial
+and non-commercial environments. By using this project, a built toolchain or a
+toolchain docker image you agree to comply with all licenses.
 
 ## Links to Related Projects
 
@@ -157,3 +81,4 @@ This toolchain compiles for Windows on a 64 bit x86 CPU. *x86_64* is also known 
 - Companion Tools
   - [autoconf](https://www.gnu.org/software/autoconf)
   - [automake](https://www.gnu.org/software/automake)
+

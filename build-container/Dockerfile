@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ENV CTNG_VERSION=1.24.0
+ARG CTNG_VERSION
 
 RUN \
   apt-get update -y && \
