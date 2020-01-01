@@ -27,17 +27,9 @@ Features of the toolchains:
   the C runtime statically into shared objects (if the target supports them)
 
 All toolchains are provided as downloads or in a docker image based on Ubuntu
-18.04 along with tools commonly used to build C/C++ projects - a perfect fit for
-CI runner images.
-
-The following tools are shipped with the docker images:
-
-- `curl`
-- `git`
-- `make`
-- `nano`
-- `patch`
-- `wget`
+18.04 LTS along with tools commonly used to build C/C++ projects - a perfect fit for
+CI runner images. Please see the documentation of the [toolchain base image](https://github.com/GriffinPlus/toolchains/tree/master/toolchain-base-container)
+for details about installed tools.
 
 ## Releases
 
