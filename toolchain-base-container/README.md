@@ -7,6 +7,16 @@ This image is built on top of Ubuntu 18.04 and brings along common development t
 It does not contain any toolchains. Derived images add the toolchain depending on specific build scenarios.
 The toolchains are available at the [project page](https://github.com/GriffinPlus/toolchains).
 
+The following tools are installed from the official Ubuntu package repositories:
+
+- curl
+- git
+- make
+- nano
+- patch
+- wget
+- zip
+
 ## License
 
 The blueprint for this docker image is under the [MIT license](https://github.com/GriffinPlus/toolchains/blob/master/LICENSE),
