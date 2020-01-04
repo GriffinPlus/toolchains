@@ -71,6 +71,15 @@ steps:
     \`\`\`
     END-OF-TEXT
 
+      # add cmake toolchain file to the image
+      # --------------------------------------------------------------------
+      mkdir -p "build-context/files/cmake"
+      cmake_toolchain_file="$(Build.SourcesDirectory)/toolchains/configs/gcc-${{ parameters.gccVersion }}/${toolchain}.toolchain.cmake"
+      if [ -f "${cmake_toolchain_file}" ]; then
+        echo "Copying cmake toolchain file..."
+        cp "${cmake_toolchain_file}" "build-context/files/cmake/toolchain-${toolchain}.cmake"
+      fi
+
       # create Dockerfile for the toolchain image
       # --------------------------------------------------------------------
       cat > "build-context/Dockerfile" <<END-OF-TEXT

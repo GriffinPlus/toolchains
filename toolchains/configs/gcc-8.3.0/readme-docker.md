@@ -11,7 +11,7 @@ These docker images provide a cross-compilation environment based on cross-toolc
 have been built by [Griffin+](https://github.com/griffinplus). The image tags select the
 target platform of the encorporated toolchain. The following toolchains are available:
 
-| Toolchain                 | Image (Docker Hub)
+| Toolchain Tuple           | Image (Docker Hub)
 | :------------------------ | :--------------------------------------------
 | i686-unknown-linux-musl   | `griffinplus/toolchain-gcc-8.3.0:i686-unknown-linux-musl`
 | i686-w64-mingw32          | `griffinplus/toolchain-gcc-8.3.0:i686-w64-mingw32`
@@ -19,6 +19,18 @@ target platform of the encorporated toolchain. The following toolchains are avai
 | x86_64-w64-mingw32        | `griffinplus/toolchain-gcc-8.3.0:x86_64-w64-mingw32`
 
 Please see the [project page](https://github.com/GriffinPlus/toolchains) for details.
+
+## Using
+
+The toolchain is installed in the container at `/usr/local/x-tools/<toolchain-tuple>/`.
+The sysroot of the cross-compiler is at `/usr/local/x-tools/<toolchain-tuple>/<toolchain-tuple>/sysroot`.
+
+### Building with CMake
+
+The container contains a *CMake* toolchain file at `/cmake/toolchain-<toolchain-tuple>.cmake`. To build a project using
+*CMake* the toolchain file must be specified using `-DCMAKE_TOOLCHAIN_FILE="/cmake/toolchain-<toolchain-tuple>.cmake"`.
+The toolchain files set the staging directory to `/tmp/staging`. The *CMake* *install* target copies its files into this
+directory to keep the sysroot of the toolchain pristine.
 
 ## License
 
