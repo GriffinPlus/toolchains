@@ -46,7 +46,7 @@ stages:
         ct-ng-latest:
           CTNG_VERSION: master
           IMAGE_TAGS: |
-            latest
+            ct-ng-latest
         ct-ng-1.24.0:
           CTNG_VERSION: 1.24.0
           IMAGE_TAGS: |
