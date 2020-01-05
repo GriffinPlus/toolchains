@@ -102,8 +102,11 @@ steps:
 
     done <<< "$(find . -name '*.tar.gz' | sort)"
 
-    # update image description
-    # --------------------------------------------------------------------
+  displayName: Build and Push
+
+# update image description
+- script: |
+    set -e
     cd "$(Build.SourcesDirectory)/releases"
     docker run \
       -v $PWD:/workspace \
@@ -113,7 +116,7 @@ steps:
       -e README_FILEPATH='/workspace/readme.md' \
       griffinplus/dockerhub-description:latest
 
-  displayName: Build and Push
+  displayName: Update image description
 
 - task: Docker@2
   displayName: Logout
