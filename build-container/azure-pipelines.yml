@@ -1,6 +1,8 @@
 # The pipeline builds the docker images providing crosstool-NG.
 # The different crosstool-NG versions pushed using different tags, e.g. the image
+# griffinplus/toolchain-builder:ct-ng-latest contains the latest version from the master crosstool-ng master branch
 # griffinplus/toolchain-builder:ct-ng-1.24.0 contains crosstool-NG v1.24.0.
+
 
 variables:
   - group: AzureKeyVault - Docker Hub
@@ -40,10 +42,13 @@ stages:
     displayName: Build
     strategy:
       matrix:
+        ct-ng-latest:
+          CTNG_VERSION: master
+          IMAGE_TAGS: |
+            latest
         ct-ng-1.24.0:
           CTNG_VERSION: 1.24.0
           IMAGE_TAGS: |
-            latest
             ct-ng-1.24.0
     steps:
     - task: Docker@2
