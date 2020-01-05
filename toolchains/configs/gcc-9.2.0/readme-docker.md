@@ -1,9 +1,9 @@
-# Docker Images with Cross-Toolchains based on GCC 8.3.0
+# Docker Images with Cross-Toolchains based on GCC 9.2.0
 
 [![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/20/master?label=Building%20Toolchain%20Builder%20Images)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=20)
-[![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/21/master?label=Building%20Toolchains%20%28gcc-8.3.0%29)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=21)
+[![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/21/master?label=Building%20Toolchains%20%28gcc-9.2.0%29)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=21)
 [![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/22/master?label=Building%20Toolchain%20Base%20Image)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=22)
-[![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/24/master?label=Dockerizing%20Toolchains%20%28gcc-8.3.0%29)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=24)
+[![Pipeline Status](https://img.shields.io/azure-devops/build/griffinplus/788a3dbf-c773-454e-803a-eaebc02f7f84/24/master?label=Dockerizing%20Toolchains%20%28gcc-9.2.0%29)](https://dev.azure.com/griffinplus/Cross-Toolchains/_build?definitionId=24)
 
 ## Overview
 
@@ -13,10 +13,10 @@ target platform of the encorporated toolchain. The following toolchains are avai
 
 | Toolchain Tuple           | Image (Docker Hub)
 | :------------------------ | :--------------------------------------------
-| i686-unknown-linux-musl   | `griffinplus/toolchain-gcc-8.3.0:i686-unknown-linux-musl`
-| i686-w64-mingw32          | `griffinplus/toolchain-gcc-8.3.0:i686-w64-mingw32`
-| x86_64-unknown-linux-musl | `griffinplus/toolchain-gcc-8.3.0:x86_64-unknown-linux-musl`
-| x86_64-w64-mingw32        | `griffinplus/toolchain-gcc-8.3.0:x86_64-w64-mingw32`
+| i686-unknown-linux-musl   | `griffinplus/toolchain-gcc-9.2.0:i686-unknown-linux-musl`
+| i686-w64-mingw32          | `griffinplus/toolchain-gcc-9.2.0:i686-w64-mingw32`
+| x86_64-unknown-linux-musl | `griffinplus/toolchain-gcc-9.2.0:x86_64-unknown-linux-musl`
+| x86_64-w64-mingw32        | `griffinplus/toolchain-gcc-9.2.0:x86_64-w64-mingw32`
 
 Please see the [project page](https://github.com/GriffinPlus/toolchains) for details.
 
