@@ -11,12 +11,12 @@ These docker images provide a cross-compilation environment based on cross-toolc
 have been built by [Griffin+](https://github.com/griffinplus). The image tags select the
 target platform of the encorporated toolchain. The following toolchains are available:
 
-| Toolchain Tuple           | Image (Docker Hub)
-| :------------------------ | :--------------------------------------------
-| i686-unknown-linux-musl   | `griffinplus/toolchain-gcc-9.2.0:i686-unknown-linux-musl`
-| i686-w64-mingw32          | `griffinplus/toolchain-gcc-9.2.0:i686-w64-mingw32`
-| x86_64-unknown-linux-musl | `griffinplus/toolchain-gcc-9.2.0:x86_64-unknown-linux-musl`
-| x86_64-w64-mingw32        | `griffinplus/toolchain-gcc-9.2.0:x86_64-w64-mingw32`
+| Toolchain Tuple             | Image (Docker Hub)
+| :-------------------------- | :--------------------------------------------
+| `i686-unknown-linux-musl`   | `griffinplus/toolchain-gcc-9.2.0:i686-unknown-linux-musl`
+| `i686-w64-mingw32`          | `griffinplus/toolchain-gcc-9.2.0:i686-w64-mingw32`
+| `x86_64-unknown-linux-musl` | `griffinplus/toolchain-gcc-9.2.0:x86_64-unknown-linux-musl`
+| `x86_64-w64-mingw32`        | `griffinplus/toolchain-gcc-9.2.0:x86_64-w64-mingw32`
 
 Please see the [project page](https://github.com/GriffinPlus/toolchains) for details.
 
