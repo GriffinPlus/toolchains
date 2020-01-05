@@ -12,7 +12,7 @@ SCRIPT_DIRECTORY=$(dirname "$SCRIPT_PATH")
 
 # build container with tools to build cross-compilers
 docker build \
-  --build-arg CTNG_VERSION=1.24.0 \
+  --build-arg CTNG_VERSION=master \
   -t griffinplus/toolchains-builder \
   "${SCRIPT_DIRECTORY}/../build-container/"
 

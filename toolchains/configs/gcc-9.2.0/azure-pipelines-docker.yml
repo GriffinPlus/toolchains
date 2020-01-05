@@ -6,9 +6,9 @@ trigger:
   paths:
     include:
     - toolchains/azure-pipelines-docker.yml.template
-    - toolchains/configs/gcc-8.3.0/azure-pipelines-docker.yml
-    - toolchains/configs/gcc-8.3.0/readme-docker.md
-    - toolchains/configs/gcc-8.3.0/*.toolchain.cmake
+    - toolchains/configs/gcc-9.2.0/azure-pipelines-docker.yml
+    - toolchains/configs/gcc-9.2.0/readme-docker.md
+    - toolchains/configs/gcc-9.2.0/*.toolchain.cmake
 
 # do not trigger on pull requests to avoid that pull requests trigger releases
 pr: none
@@ -16,6 +16,6 @@ pr: none
 extends:
   template: ../../azure-pipelines-docker.yml.template
   parameters:
-    gccVersion: 8.3.0
-    dockerImage: griffinplus/toolchain-gcc-8.3.0
-    readmePath: /toolchains/configs/gcc-8.3.0/readme-docker.md
+    gccVersion: 9.2.0
+    dockerImage: griffinplus/toolchain-gcc-9.2.0
+    readmePath: /toolchains/configs/gcc-9.2.0/readme-docker.md

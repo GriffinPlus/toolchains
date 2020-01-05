@@ -18,6 +18,7 @@ TOOLCHAIN_CONFIG_PATH="${SCRIPT_DIRECTORY}/configs/${GCC_VERSION}/${TOOLCHAIN_NA
 cd "${SCRIPT_DIRECTORY}"
 cp "${TOOLCHAIN_CONFIG_PATH}" .config
 ct-ng oldconfig
+ct-ng upgradeconfig
 ct-ng build.${CONCURRENCY_LEVEL}
 
 # create toolchain version information and package information file

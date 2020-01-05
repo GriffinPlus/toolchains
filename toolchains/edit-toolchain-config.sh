@@ -17,6 +17,7 @@ WORKING_DIRECTORY=`pwd`
 TOOLCHAIN_CONFIG_PATH=`readlink -f "$1"`
 cp "${TOOLCHAIN_CONFIG_PATH}" .config
 ct-ng oldconfig
+ct-ng upgradeconfig
 ct-ng menuconfig
 cp .config "${TOOLCHAIN_CONFIG_PATH}"
 

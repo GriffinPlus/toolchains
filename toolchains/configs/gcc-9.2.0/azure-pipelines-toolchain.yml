@@ -8,8 +8,8 @@ trigger:
     - toolchains/*
     exclude:
     - toolchains/azure-pipelines-docker.yml.template
-    - toolchains/configs/gcc-8.3.0/azure-pipelines-docker.yml
-    - toolchains/configs/gcc-8.3.0/*.toolchain.cmake
+    - toolchains/configs/gcc-9.2.0/azure-pipelines-docker.yml
+    - toolchains/configs/gcc-9.2.0/*.toolchain.cmake
 
 # do not trigger on pull requests to avoid that pull requests trigger releases
 pr: none
@@ -17,8 +17,8 @@ pr: none
 extends:
   template: ../../azure-pipelines-toolchain.yml.template
   parameters:
-    gccVersion: 8.3.0
-    ctngVersion: 1.24.0
+    gccVersion: 9.2.0
+    ctngVersion: latest # 1.24.0
     strategyMatrix:
       i686_unknown_linux_musl:
         TARGET: i686-unknown-linux-musl
