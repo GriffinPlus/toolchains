@@ -36,7 +36,7 @@ for details about installed tools.
 The built toolchains can be downloaded from the [Releases](https://github.com/GriffinPlus/toolchains/releases)
 section. Furthermore the toolchains are also available as docker images that can
 directly be used in a CI pipeline. The docker images are available from the
-[Docker Hub](https://hub.docker.com/repository/docker/griffinplus/toolchain).
+Docker Hub ([gcc-9.2.0](https://hub.docker.com/r/griffinplus/toolchain-gcc-9.2.0)).
 The different toolchains can be selected via the image tag.
 
 ## License
