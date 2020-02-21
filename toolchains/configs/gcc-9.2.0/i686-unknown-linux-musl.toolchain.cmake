@@ -12,3 +12,18 @@ set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER )
 set( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY )
 set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY )
 set( CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY )
+
+if( INSTALL_TOOLCHAIN_FILES )
+
+#    file( MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tmp/toolchain" )
+#    file( CREATE_LINK "libc.so" "${CMAKE_BINARY_DIR}/tmp/toolchain/ld-musl-i686.so.1" SYMBOLIC )
+#    file(GLOB TOOLCHAIN_LIBRARY_FILES
+#        "${CMAKE_SYSROOT}/lib/libatomic.so*"
+#        "${CMAKE_SYSROOT}/lib/libgcc_s.so*"
+#        "${CMAKE_SYSROOT}/lib/libstdc++.so*"
+#        "${CMAKE_SYSROOT}/usr/lib/libc.so"
+#        "${CMAKE_BINARY_DIR}/tmp/toolchain/ld-musl-i686.so*" )
+
+#    install( FILES ${TOOLCHAIN_LIBRARY_FILES} TYPE LIB )
+
+endif()

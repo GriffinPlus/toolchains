@@ -14,5 +14,11 @@ set( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY )
 set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY )
 set( CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY )
 
-set( TOOLCHAIN_RUNTIME_FILES
-     "/usr/local/x-tools/x86_64-w64-mingw32/x86_64-w64-mingw32/sysroot/usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll" )
+if( INSTALL_TOOLCHAIN_FILES )
+
+    set( TOOLCHAIN_RUNTIME_FILES
+         "${CMAKE_SYSROOT}/usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll" )
+
+    install( FILES ${TOOLCHAIN_RUNTIME_FILES} TYPE BIN )
+
+endif()
